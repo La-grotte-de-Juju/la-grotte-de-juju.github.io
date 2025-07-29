@@ -7,7 +7,7 @@ import { AlertTriangle, Bug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 
-const SITE_VERSION = "testchannel-verbêta-1.8.0";
+const SITE_VERSION = "testchannel-verbêta-1.9.0";
 const DEV_TITLE = "Site en développement";
 const DEV_MESSAGE = "Ce site peut contenir des bugs, des fonctionnalités manquantes, etc.";
 
