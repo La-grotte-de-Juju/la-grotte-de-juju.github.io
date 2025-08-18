@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getBDFolders } from '@/data/bd-data';
+import { getBDFolders, type BDFolder } from '@/data/bd-data';
 
 export default function TestGitHubPage() {
-  const [data, setData] = useState<any>(null);
+  // Données retournées par getBDFolders : tableau de BDFolder ou null avant chargement
+  const [data, setData] = useState<BDFolder[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
