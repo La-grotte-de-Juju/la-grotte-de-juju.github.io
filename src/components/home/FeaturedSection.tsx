@@ -5,18 +5,20 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import AnimateOnScroll from "@/components/animation/AnimateOnScroll";
 import { motion } from "framer-motion";
-import { BookOpen, Users, Film, Sparkles, ArrowRight } from "lucide-react";
+import { BookOpen, Users, Sparkles, ArrowRight, Newspaper } from "lucide-react";
 import { useState } from "react";
 
 const featuredItems = [
 	{
 		title: "Bibliothèque de La Grotte",
-		description: "Plongez dans l'univers captivant de Batlife à travers des bandes dessinées pleines d'humour et d'aventures épiques.",
+		description: "Entre dans la Bibliothèque de La Grotte et retrouve toutes les bandes dessinées créées par Juju, mêlant humour, aventures et univers uniques à découvrir sans modération.",
 		image: "/images/animation/Strip-grotte-Visual.gif",
 		link: "/bd",
 		icon: BookOpen,
 		category: "BD & Comics",
-		color: "from-emerald-500 to-teal-600",		bgPattern: "bg-emerald-50 dark:bg-emerald-950/20"
+		color: "from-emerald-500 to-teal-600",
+		bgPattern: "bg-emerald-50 dark:bg-emerald-950/20",
+		shadowRgb: "16,185,129" // emerald-500
 	},
 	{
 		title: "Galerie des Héros",
@@ -26,22 +28,33 @@ const featuredItems = [
 		icon: Users,
 		category: "Personnages",
 		color: "from-purple-500 to-indigo-600",
-		bgPattern: "bg-purple-50 dark:bg-purple-950/20"
+		bgPattern: "bg-purple-50 dark:bg-purple-950/20",
+		shadowRgb: "168,85,247" // purple-500
 	},
 	{
-		title: "Animations Exclusives",
-		description: "Vivez des aventures épiques avec nos séries animées au style unique et aux histoires captivantes qui vous transporteront.",
-		image: "/images/dev img/5.webp",
-		link: "/series",
-		icon: Film,
-		category: "Animations",
-		color: "from-orange-500 to-red-600",
-		bgPattern: "bg-orange-50 dark:bg-orange-950/20"
+		title: "Blog de La Grotte",
+		description: "Toutes les news de l'univers : annonces YouTube, nouveautés des BD, events Discord, coulisses et mises à jour des autres réseaux – tout est centralisé ici !",
+		image: "/images/headerfullresV1.webp",
+		link: "/blog",
+		icon: Newspaper,
+		category: "Actus & News",
+		color: "from-sky-500 to-blue-600",
+		bgPattern: "bg-sky-50 dark:bg-sky-950/20",
+		shadowRgb: "14,165,233" // sky-500
 	},
 ];
 
 function FeatureCard({ item, index }: { item: typeof featuredItems[0], index: number }) {
 	const [isHovered, setIsHovered] = useState(false);
+
+	// Ombres : base neutre + hover légèrement teinté (subtile, moins saturé)
+	const baseShadow = "0 2px 6px -2px rgba(0,0,0,0.08), 0 1px 3px -1px rgba(0,0,0,0.04)";
+	const hoverShadow = [
+		"0 4px 18px -4px rgba(0,0,0,0.14)",
+		"0 2px 8px -2px rgba(0,0,0,0.08)",
+		`0 0 0 1px rgba(${item.shadowRgb},0.22)`, // léger ring teinté
+		`0 0 0 6px rgba(${item.shadowRgb},0.06)` // halo très doux
+	].join(", ");
 	
 	return (
 		<motion.div
@@ -52,7 +65,10 @@ function FeatureCard({ item, index }: { item: typeof featuredItems[0], index: nu
 			transition={{ type: "tween", duration: 0.2, ease: "easeOut" }}
 		>
 			{/* Carte principale avec effets de hover optimisés */}
-			<div className="relative h-full bg-white dark:bg-gray-900/95 rounded-3xl overflow-hidden shadow-lg group-hover:shadow-xl transition-shadow duration-300 border border-gray-200/50 dark:border-gray-700/50">
+			<div
+				className="relative h-full rounded-3xl overflow-hidden transition-all duration-300 tinted-surface tinted-surface-hover"
+				style={{ boxShadow: isHovered ? hoverShadow : baseShadow, willChange: "transform, box-shadow" }}
+			>
 				
 				{/* Image avec ratio 16:9 et effets optimisés */}
 				<div className="relative aspect-video overflow-hidden">
@@ -117,15 +133,22 @@ function FeatureCard({ item, index }: { item: typeof featuredItems[0], index: nu
 				</div>
 			</div>
 			
-			{/* Ombre projetée */}
-			<div className={`absolute inset-0 bg-gradient-to-br ${item.color} rounded-3xl blur-2xl opacity-0 group-hover:opacity-20 transition-all duration-500 -z-10 translate-y-6`}></div>
+			{/* Halo doux (glow) beaucoup plus subtil */}
+			<div
+				className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-70 transition duration-500 -z-10"
+				style={{
+					background: `radial-gradient(circle at 50% 65%, rgba(${item.shadowRgb},0.28), rgba(${item.shadowRgb},0) 65%)`,
+					filter: "blur(26px)",
+					transform: "translateY(26px) scale(0.96)",
+				}}
+			></div>
 		</motion.div>
 	);
 }
 
 export function FeaturedSection() {
 	return (
-		<section className="py-24 bg-white dark:bg-gray-900 relative overflow-hidden">
+		<section className="py-24 bg-transparent dark:bg-transparent relative overflow-hidden" style={{ contentVisibility: 'auto', containIntrinsicSize: '600px' }}>
 			{/* Éléments décoratifs de fond simplifiés */}
 			<div className="absolute inset-0 opacity-20">
 				<div className="absolute top-20 left-10 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl"></div>

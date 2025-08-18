@@ -36,7 +36,7 @@ const latestVideos = [
 
 export function LatestVideosSection() {
 	return (
-		<section className="py-20 bg-background">
+		<section className="py-20 bg-transparent dark:bg-transparent">
 			<div className="container px-4 md:px-6">
 				<div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
 					<AnimateOnScroll animation="apple-slide">

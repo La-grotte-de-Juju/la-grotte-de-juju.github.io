@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Link as LinkIcon, Menu as MenuIcon, X, Image as ImageIcon, BookText, Lightbulb, LibraryBig } from 'lucide-react';
+import AnimatedGlobeIcon from '@/components/ui/AnimatedGlobeIcon';
 import { motion, AnimatePresence, MotionStyle } from 'framer-motion';
 import {
   Sheet,
@@ -58,15 +59,11 @@ const StartupNavbar: React.FC = () => {
   }, [isMenuOpen]);
 
   const navVariants = {
-    hidden: { y: -10, opacity: 0, scale: 0.98 },
+    hidden: { y: -12, opacity: 0 },
     visible: { 
       y: 0, 
       opacity: 1,
-      scale: 1,
-      transition: { 
-        duration: 0.4,
-        ease: "easeOut"
-      } 
+      transition: { duration: 0.35, ease: "easeOut" }
     }
   };
 
@@ -102,9 +99,27 @@ const StartupNavbar: React.FC = () => {
     position: 'relative' as const,
   };
 
+  // Met à jour une variable CSS globale avec la hauteur réelle de la navbar (utile pour les sections sticky en dessous)
+  useEffect(() => {
+    const updateVar = () => {
+      if (navbarRef.current) {
+        const h = navbarRef.current.getBoundingClientRect().height;
+        document.documentElement.style.setProperty('--navbar-height', h + 'px');
+      }
+    };
+    updateVar();
+    window.addEventListener('resize', updateVar);
+    window.addEventListener('scroll', updateVar, { passive: true });
+    return () => {
+      window.removeEventListener('resize', updateVar);
+      window.removeEventListener('scroll', updateVar);
+    };
+  }, []);
+
   return (
-    <div 
-      className={`fixed top-0 left-0 right-0 flex justify-center z-50 transition-all duration-500 ease-in-out`} 
+    <div
+      ref={navbarRef}
+      className={`fixed top-0 left-0 right-0 flex justify-center z-50 transition-all duration-500 ease-in-out`}
       style={topSpacing}
     >
       <motion.nav
@@ -134,18 +149,31 @@ const StartupNavbar: React.FC = () => {
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.2 }}
             >
-              <Link href="/" className="flex items-center space-x-1.5">
-                <Image
-                  src="/images/juju-logo.webp"
-                  alt="La Grotte de Juju Logo"
-                  width={30}
-                  height={30}
-                  className="rounded-full transition-all hover:shadow-md"
-                />
-                <span className="font-bold text-sm text-gray-900 dark:text-white">
-                  La Grotte de Juju
-                </span>
-              </Link>
+              <div className="flex items-center space-x-1.5">
+                <Link href="/" className="flex items-center space-x-1.5">
+                  <Image
+                    src="/images/juju-logo.webp"
+                    alt="La Grotte de Juju Logo"
+                    width={30}
+                    height={30}
+                    className="rounded-full transition-all hover:shadow-md"
+                  />
+                  <span className="font-bold text-sm text-gray-900 dark:text-white whitespace-nowrap">
+                    La Grotte de Juju
+                  </span>
+                </Link>
+                {/* Icône globe animée complexe (lord-icon) */}
+                <Link href="/map" className="inline-flex items-center" aria-label="Carte du site">
+                  <motion.span
+                    className="ml-1 pl-1 flex items-center"
+                    whileHover={{ scale: 1.1, rotate: 8 }}
+                    whileTap={{ scale: 0.92 }}
+                    transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+                  >
+                    <AnimatedGlobeIcon size={20} className="select-none pointer-events-none" />
+                  </motion.span>
+                </Link>
+              </div>
             </motion.div>
 
             <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center justify-center z-10">

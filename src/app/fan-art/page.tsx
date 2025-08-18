@@ -15,8 +15,8 @@ export default function FanArtPage() {
         <AnimateOnScroll animation="glass-morph" duration={1.0}>
           <div className="text-center mb-10 md:mb-16">
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 dark:text-white mb-4">
-              Les Fan Arts<br />
-              dans l'univers de{' '}
+              Les Fan Arts de la grotte de <br />
+              {' '}
               <span className="relative inline-block">
                 <span
                   className="absolute inset-0 blur-lg bg-apple-gradient from-apple-blue via-apple-purple to-apple-orange bg-[length:200%_auto] bg-clip-text text-transparent animate-apple-gradient"

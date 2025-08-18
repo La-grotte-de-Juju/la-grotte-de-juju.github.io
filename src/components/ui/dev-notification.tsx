@@ -7,7 +7,7 @@ import { AlertTriangle, Bug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
 
-const SITE_VERSION = "testchannel-verbêta-1.9.0";
+const SITE_VERSION = "testchannel-verbêta-1.10.0";
 const DEV_TITLE = "Site en développement";
 const DEV_MESSAGE = "Ce site peut contenir des bugs, des fonctionnalités manquantes, etc.";
 
@@ -69,7 +69,7 @@ export function DevNotification() {
     <AnimatePresence>
       {showCard && currentImage && (
         <motion.div
-          className="fixed bottom-5 right-5 z-[200] w-96 max-w-[calc(100vw-40px)] rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800 overflow-hidden"
+          className="fixed bottom-5 right-5 z-[200] w-96 max-w-[calc(100vw-40px)] rounded-xl overflow-hidden tinted-surface"
           initial="hidden"
           animate={isClosing ? "exit" : "visible"}
           exit="exit"

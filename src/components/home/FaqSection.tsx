@@ -31,7 +31,7 @@ const faqs = [
 
 export function FaqSection() {
   return (
-    <section className="py-20 bg-background">
+  <section className="py-20 bg-transparent dark:bg-transparent" style={{ contentVisibility: 'auto', containIntrinsicSize: '500px' }}>
       <div className="container px-4 md:px-6">
         <AnimateOnScroll animation="depth-push">
           <div className="mb-12 text-center">

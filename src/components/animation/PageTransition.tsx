@@ -3,10 +3,12 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
+import { useAnimationContext } from "@/components/layout/AnimationProvider";
 
 interface PageTransitionProps {
   children: ReactNode;
   blurIntensity?: number; 
+  animationsReady?: boolean; // possibilité de forcer via prop
 }
 
 // Animations modernes style Apple avec des courbes de Bézier élégantes
@@ -49,8 +51,16 @@ const appleTransition = {
   duration: 0.6,
 };
 
-export default function PageTransition({ children, blurIntensity = 20 }: PageTransitionProps) {
+export default function PageTransition({ children, blurIntensity = 20, animationsReady }: PageTransitionProps) {
   const pathname = usePathname();
+  let ready = animationsReady;
+  try {
+    const ctx = useAnimationContext();
+    if (ready === undefined) ready = ctx.animationsReady;
+  } catch {
+    // si pas de provider, on laisse animer directement
+    ready = true;
+  }
 
   const customVariants = {
     initial: {
@@ -77,7 +87,7 @@ export default function PageTransition({ children, blurIntensity = 20 }: PageTra
         <motion.div
           key={pathname}
           initial="initial"
-          animate="animate"
+          animate={ready ? "animate" : "initial"}
           exit="exit"
           variants={customVariants}
           transition={{

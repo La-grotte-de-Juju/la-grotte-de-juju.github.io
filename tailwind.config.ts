@@ -138,6 +138,12 @@ export default {
           '0%, 100%': { 'background-position': '0% 50%' },
           '50%': { 'background-position': '100% 50%' },
         },
+			'card-sweep': {
+				'0%': { transform: 'translateX(0)', opacity: '0' },
+				'10%': { opacity: '1' },
+				'55%': { opacity: '1' },
+				'100%': { transform: 'translateX(180%)', opacity: '0' },
+			},
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
@@ -152,6 +158,7 @@ export default {
         'rotate-in': 'rotate-in 0.5s ease-out forwards',
         'border-flow': 'border-flow 3s ease infinite',
         'apple-gradient': 'apple-gradient-shift 6s ease infinite',
+			'card-sweep': 'card-sweep 0.25s cubic-bezier(.45,.05,.35,.95)',
   		},
       backgroundImage: {
         'hero-pattern': "url('/images/headerfullresV1.webp')",

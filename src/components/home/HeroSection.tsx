@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, useAnimation, Variants } from "framer-motion";
+import { motion } from "framer-motion"; // framer uniquement pour le bouton interactif / loader
 import Image from "next/image";
 
 export function HeroSection() {
@@ -9,14 +9,12 @@ export function HeroSection() {
   const [isVideoLoading, setIsVideoLoading] = useState(false);
   const [videoElement, setVideoElement] = useState<JSX.Element | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const controls = useAnimation();
+  const [mounted, setMounted] = useState(false); // pour déclencher les animations après hydration
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      controls.start("visible");
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [controls]);
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   const handlePlayClick = () => {
     if (!videoElement) {
@@ -51,92 +49,7 @@ export function HeroSection() {
     }
   };
 
-  const titleVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      y: 30,
-      scale: 0.9,
-      filter: "blur(15px)",
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      filter: "blur(0px)",
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-        mass: 1.2,
-        delay: 0.2,
-      },
-    },
-  };
-
-  const brandNameVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.8,
-      filter: "blur(12px)",
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      filter: "blur(0px)",
-      transition: {
-        type: "spring",
-        damping: 10,
-        stiffness: 80,
-        mass: 1.8,
-        delay: 0.5,
-      },
-    },
-  };
-
-  const descriptionVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      y: 40,
-      scale: 0.95,
-      filter: "blur(10px)",
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      filter: "blur(0px)",
-      transition: {
-        type: "spring",
-        damping: 15,
-        stiffness: 90,
-        delay: 0.7,
-      },
-    },
-  };
-
-  const videoContainerVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-      scale: 0.92,
-      filter: "blur(20px)",
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      filter: "blur(0px)",
-      transition: {
-        type: "spring",
-        damping: 8,
-        stiffness: 70,
-        mass: 1.5,
-        delay: 0.9,
-      },
-    },
-  };
-
-  const playButtonVariants: Variants = {
+  const playButtonVariants = {
     initial: { scale: 1 },
     hover: {
       scale: 1.1,
@@ -156,74 +69,44 @@ export function HeroSection() {
       },
     },
   };
-
-  const backdropVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      backdropFilter: "blur(20px)",
-    },
-    visible: {
-      opacity: 0.95,
-      backdropFilter: "blur(20px)",
-      backgroundColor: "rgba(0, 0, 0, 0.85)",
-      transition: {
-        duration: 1.2,
-        ease: "easeOut",
-        delay: 0.1,
-      },
-    },
-  };
+  // Génération style inline pour delays (si mounted)
+  const delay = (ms:number): React.CSSProperties => mounted ? { animationDelay: ms + 'ms' } : {};
 
   return (
     <section className="relative flex items-center justify-center min-h-screen overflow-hidden bg-center bg-cover bg-hero-pattern">
-      <motion.div
-        className="absolute inset-0 bg-black"
-        initial="hidden"
-        animate={controls}
-        variants={backdropVariants}
-      ></motion.div>
-
+  <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
       <div className="relative z-10 container px-4 md:px-6 text-center text-white">
-        <motion.div
-          initial="hidden"
-          animate={controls}
-          variants={titleVariants}
+        <h1
+          className={`hero-fade-item text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none title-font mb-6 ${mounted ? 'is-visible' : ''}`}
+          style={delay(40)}
         >
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none title-font mb-6">
-            Bienvenue dans <br />
-            <motion.span
-              className="relative inline-block"
-              variants={brandNameVariants}
-              initial="hidden"
-              animate={controls}
+          Bienvenue dans <br />
+          <span
+            className={`relative inline-block hero-fade-item ${mounted ? 'is-visible' : ''}`}
+            style={delay(140)}
+          >
+            <span
+              className="absolute inset-0 blur-lg bg-apple-gradient from-apple-blue via-apple-purple to-apple-orange bg-[length:200%_auto] bg-clip-text text-transparent animate-apple-gradient"
+              aria-hidden="true"
             >
-              <span
-                className="absolute inset-0 blur-lg bg-apple-gradient from-apple-blue via-apple-purple to-apple-orange bg-[length:200%_auto] bg-clip-text text-transparent animate-apple-gradient"
-                aria-hidden="true"
-              >
-                La Grotte de Juju
-              </span>
-              <span className="relative z-10 bg-apple-gradient from-apple-blue via-apple-purple to-apple-orange bg-[length:200%_auto] bg-clip-text text-transparent animate-apple-gradient">
-                La Grotte de Juju
-              </span>
-            </motion.span>
-          </h1>
-        </motion.div>
+              La Grotte de Juju
+            </span>
+            <span className="relative z-10 bg-apple-gradient from-apple-blue via-apple-purple to-apple-orange bg-[length:200%_auto] bg-clip-text text-transparent animate-apple-gradient">
+              La Grotte de Juju
+            </span>
+          </span>
+        </h1>
 
-        <motion.p
-          className="max-w-[700px] mx-auto text-base md:text-lg mb-8"
-          initial="hidden"
-          animate={controls}
-          variants={descriptionVariants}
+        <p
+          className={`hero-fade-item max-w-[700px] mx-auto text-base md:text-lg mb-8 ${mounted ? 'is-visible' : ''}`}
+          style={delay(240)}
         >
           Ici, tu pourras rester au courant des nouveautés de la chaîne, qu'il s'agisse des dernières vidéos, des créations en cours ou de l'univers qui prend forme peu à peu ! Tu auras même la chance de lire des bandes dessinées mettant en scène tes personnages préférés.
-        </motion.p>
+        </p>
 
-        <motion.div
-          className="w-full max-w-2xl mx-auto mt-8 rounded-3xl shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden border border-white/10 bg-white/10 backdrop-blur-xl"
-          initial="hidden"
-          animate={controls}
-          variants={videoContainerVariants}
+        <div
+          className={`hero-fade-item w-full max-w-2xl mx-auto mt-8 rounded-3xl shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden border border-white/10 bg-white/10 backdrop-blur-xl ${mounted ? 'is-visible' : ''}`}
+          style={delay(340)}
         >
           <div className="bg-transparent px-6 py-3 flex items-center justify-center relative">
             <div className="absolute left-6 flex items-center space-x-2">
@@ -328,8 +211,26 @@ export function HeroSection() {
 
             {videoElement}
           </div>
-        </motion.div>
+        </div>
       </div>
+      <style jsx>{`
+        .hero-fade-item {
+          opacity: 0;
+          transform: translateY(20px) scale(.988);
+          filter: blur(2px);
+        }
+        .hero-fade-item.is-visible {
+          animation: heroFadeLift .65s cubic-bezier(.25,.1,.25,1) forwards;
+        }
+        @keyframes heroFadeLift {
+          0% { opacity:0; transform:translateY(20px) scale(.988); filter:blur(2px); }
+          40% { opacity:1; filter:blur(0.6px); }
+          100% { opacity:1; transform:translateY(0) scale(1); filter:blur(0px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-fade-item, .hero-fade-item.is-visible { animation:none!important; opacity:1!important; transform:none!important; filter:none!important; }
+        }
+      `}</style>
     </section>
   );
 }

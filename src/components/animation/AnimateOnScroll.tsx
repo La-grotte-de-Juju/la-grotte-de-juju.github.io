@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useEffect, ReactNode, memo } from "react";
-import { motion, useInView, useAnimation } from "framer-motion";
+import { useRef, ReactNode, memo, useState, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+import { useAnimationContext } from "@/components/layout/AnimationProvider";
 
 interface AnimateOnScrollProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ interface AnimateOnScrollProps {
   className?: string;
   once?: boolean;
   intensity?: number;
+  stabilize?: boolean; // Empêche de repasser en hidden juste à la limite du viewport
 }
 
 // Nouvelles animations modernes inspirées d'Apple avec courbes de Bézier avancées
@@ -219,24 +221,43 @@ const AnimateOnScroll = memo(function AnimateOnScroll({
   className = "",
   once = false, // Changé à false pour que les animations se rejouent
   intensity = 1,
+  stabilize = true,
 }: AnimateOnScrollProps) {
   const ref = useRef(null);
-  
-  const isInView = useInView(ref, {
-    once,
+  let animationsReady = true;
+  try {
+    const ctx = useAnimationContext();
+    animationsReady = ctx.animationsReady;
+  } catch {
+    animationsReady = true;
+  }
+  // Utilisation interne d'une vue stabilisée pour éviter les oscillations rapides proches du seuil
+  const rawInView = useInView(ref, {
+    once: false, // on gère nous-mêmes 'once'
     amount: threshold,
-    margin: "80px 0px 80px 0px"
+    margin: "80px 0px 80px 0px",
   });
-  
-  const controls = useAnimation();
+
+  const [hasEntered, setHasEntered] = useState(false);
+  const [stableInView, setStableInView] = useState(false);
 
   useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    } else {
-      controls.start("hidden");
+    if (rawInView) {
+      setHasEntered(true);
+      setStableInView(true);
+    } else if (!rawInView && !once && !stabilize) {
+      // Mode libre: on laisse retomber à hidden immédiatement
+      setStableInView(false);
+    } else if (!rawInView && !once && stabilize) {
+      // Hysteresis légère pour éviter clignotement
+      const timeout = setTimeout(() => {
+        setStableInView((prev) => (rawInView ? prev : false));
+      }, 180); // 180ms de latence
+      return () => clearTimeout(timeout);
     }
-  }, [isInView, controls]);
+  }, [rawInView, once, stabilize]);
+
+  const isActive = once ? hasEntered : stableInView;
 
   const selectedAnimation = modernAnimations[animation] || modernAnimations["modern-fade"];
   
@@ -298,13 +319,13 @@ const AnimateOnScroll = memo(function AnimateOnScroll({
     <motion.div
       ref={ref}
       initial="hidden"
-      animate={controls}
+  animate={isActive && animationsReady ? "visible" : "hidden"}
       variants={selectedAnimation}
       transition={getTransitionConfig()}
-      style={shouldPreserve3D ? { 
-        perspective: "1200px", 
-        transformStyle: "preserve-3d" 
-      } : undefined}
+      style={{
+        ...(shouldPreserve3D ? { perspective: "1200px", transformStyle: "preserve-3d" } : {}),
+        willChange: "opacity, transform", // réduit le coût (éviter filter/backdrop en will-change sur trop d'éléments)
+      }}
       className={className}
     >
       {children}
