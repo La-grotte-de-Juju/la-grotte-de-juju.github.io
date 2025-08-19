@@ -65,7 +65,8 @@ export default function NotFound() {
 
   return (
     <PageTransition>
-      <div className="flex flex-col min-h-screen bg-white text-slate-800 items-center justify-center">
+  {/* Retrait du fond blanc pour laisser voir le dégradé global */}
+  <div className="flex flex-col min-h-screen text-slate-800 items-center justify-center">
         <main className="flex flex-grow flex-col items-center justify-center text-center px-4 py-16 md:py-24">
           <motion.div
             className="max-w-lg w-full"

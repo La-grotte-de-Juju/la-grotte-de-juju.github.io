@@ -72,9 +72,18 @@ function BodyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function ClientBody({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  // Tolère éventuel trailing slash ou sous-segments (ex: /fiches-personnages?x=1)
+  const isFichesPersos = pathname?.startsWith("/fiches-personnages");
+  const bodyClass = isFichesPersos
+    ? "antialiased min-h-screen bg-white fiche-persos-page"
+    : "antialiased min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/30 dark:to-gray-800";
+
   return (
     <body
-      className="antialiased min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/30 dark:to-gray-800"
+      className={bodyClass}
+      // style inline pour écraser toute image de fond provenant de classes utilitaires si page fiches persos
+      style={isFichesPersos ? { backgroundColor: '#ffffff', backgroundImage: 'none' } : undefined}
       suppressHydrationWarning
     >
       <AnimationProvider>

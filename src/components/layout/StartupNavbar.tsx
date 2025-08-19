@@ -26,6 +26,7 @@ const StartupNavbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navbarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,6 +46,18 @@ const StartupNavbar: React.FC = () => {
     setTimeout(() => {
       setIsMounted(true);
     }, 100);
+  }, []);
+
+  // Détection responsive pour appliquer une width différente mobile / desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth < 768); // breakpoint Tailwind md
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
@@ -86,7 +99,7 @@ const StartupNavbar: React.FC = () => {
   const navbarStyle: MotionStyle = {
     padding: `${0.2 + ((1 - scrollProgress) * 0.2)}rem ${1 + ((1 - scrollProgress) * 0.25)}rem`,
     borderRadius: `${(1 - scrollProgress) * 1}rem`,
-    width: `${scrollProgress * 100 + (1 - scrollProgress) * 50}%`, 
+  width: `${scrollProgress * 100 + (1 - scrollProgress) * (isMobile ? 65 : 38)}%`,
     maxWidth: scrollProgress > 0.9 ? '100%' : `${(1 - scrollProgress) * 48 + 36}rem`,
     backgroundColor: `rgba(255, 255, 255, ${0.70 + scrollProgress * 0.15})`,
     backdropFilter: `blur(${8 + scrollProgress * 4}px)`,

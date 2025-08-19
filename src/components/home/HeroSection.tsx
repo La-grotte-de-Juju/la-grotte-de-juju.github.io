@@ -74,7 +74,7 @@ export function HeroSection() {
 
   return (
     <section className="relative flex items-center justify-center min-h-screen overflow-hidden bg-center bg-cover bg-hero-pattern">
-  <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
+  <div className="absolute inset-0 bg-black/70 backdrop-blur-[6px]" />
       <div className="relative z-10 container px-4 md:px-6 text-center text-white">
         <h1
           className={`hero-fade-item text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none title-font mb-6 ${mounted ? 'is-visible' : ''}`}

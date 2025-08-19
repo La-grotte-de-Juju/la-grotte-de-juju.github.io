@@ -6,8 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Bug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePathname } from 'next/navigation';
-
-const SITE_VERSION = "testchannel-verbêta-1.10.0";
+import SITE_VERSION from '@/config/site-version';
 const DEV_TITLE = "Site en développement";
 const DEV_MESSAGE = "Ce site peut contenir des bugs, des fonctionnalités manquantes, etc.";
 
