@@ -15,8 +15,6 @@ interface AnimateOnScrollProps {
   intensity?: number;
   stabilize?: boolean; // Empêche de repasser en hidden juste à la limite du viewport
 }
-
-// Nouvelles animations modernes inspirées d'Apple avec courbes de Bézier avancées
 const modernAnimations = {
   "modern-fade": {
     hidden: { 
@@ -219,7 +217,7 @@ const AnimateOnScroll = memo(function AnimateOnScroll({
   delay = 0,
   threshold = 0.15,
   className = "",
-  once = false, // Changé à false pour que les animations se rejouent
+  once = false,
   intensity = 1,
   stabilize = true,
 }: AnimateOnScrollProps) {
@@ -231,9 +229,8 @@ const AnimateOnScroll = memo(function AnimateOnScroll({
   } catch {
     animationsReady = true;
   }
-  // Utilisation interne d'une vue stabilisée pour éviter les oscillations rapides proches du seuil
   const rawInView = useInView(ref, {
-    once: false, // on gère nous-mêmes 'once'
+  once: false,
     amount: threshold,
     margin: "80px 0px 80px 0px",
   });
@@ -246,10 +243,8 @@ const AnimateOnScroll = memo(function AnimateOnScroll({
       setHasEntered(true);
       setStableInView(true);
     } else if (!rawInView && !once && !stabilize) {
-      // Mode libre: on laisse retomber à hidden immédiatement
       setStableInView(false);
     } else if (!rawInView && !once && stabilize) {
-      // Hysteresis légère pour éviter clignotement
       const timeout = setTimeout(() => {
         setStableInView((prev) => (rawInView ? prev : false));
       }, 180); // 180ms de latence
@@ -261,7 +256,6 @@ const AnimateOnScroll = memo(function AnimateOnScroll({
 
   const selectedAnimation = modernAnimations[animation] || modernAnimations["modern-fade"];
   
-  // Configuration des transitions avec courbes Apple
   const getTransitionConfig = () => {
     const baseConfig = {
       duration: Math.min(duration * intensity, 1.2),

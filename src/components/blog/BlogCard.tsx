@@ -13,7 +13,6 @@ interface BlogCardProps {
   disableScrollAnimation?: boolean;
 }
 
-// Carte blog optimisée (pas de 3D) – hover translation + ombres légères
 export const BlogCard = memo(function BlogCard({ post, index, onSelect, disableScrollAnimation = false }: BlogCardProps) {
   const date = new Date(post.date);
   const formatted = date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
@@ -23,14 +22,13 @@ export const BlogCard = memo(function BlogCard({ post, index, onSelect, disableS
 
   const KindIcon = useMemo(() => post.kind === 'nouvelle_video' ? Video : Megaphone, [post.kind]);
 
-  // Gestion du sweep (doit continuer après sortie du hover)
   const [sweeping, setSweeping] = useState(false);
   const [sweepKey, setSweepKey] = useState(0); // force reflow pour relancer l’anim
   const sweepTimeoutRef = useRef<number | null>(null);
   const SWEEP_DURATION = 250; // ms (doit correspondre à tailwind config)
 
   function triggerSweep() {
-    if (sweeping) return; // Ne pas relancer tant que pas fini
+  if (sweeping) return;
     setSweeping(true);
     setSweepKey(k => k + 1);
     if (sweepTimeoutRef.current) cancelAnimationFrame(sweepTimeoutRef.current);

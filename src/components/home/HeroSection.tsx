@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion"; // framer uniquement pour le bouton interactif / loader
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 export function HeroSection() {
@@ -9,7 +9,7 @@ export function HeroSection() {
   const [isVideoLoading, setIsVideoLoading] = useState(false);
   const [videoElement, setVideoElement] = useState<JSX.Element | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [mounted, setMounted] = useState(false); // pour déclencher les animations après hydration
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
@@ -69,7 +69,6 @@ export function HeroSection() {
       },
     },
   };
-  // Génération style inline pour delays (si mounted)
   const delay = (ms:number): React.CSSProperties => mounted ? { animationDelay: ms + 'ms' } : {};
 
   return (

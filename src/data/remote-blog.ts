@@ -1,8 +1,5 @@
-// Fetch dynamique des données blog (annonces & nouvelles vidéos) depuis le dépôt ressources
-// URL JSON distante
 export const REMOTE_BLOG_URL = "https://raw.githubusercontent.com/La-grotte-de-Juju/La-grotte-de-Juju-Ressources/refs/heads/main/blog_data.json";
 
-// Types distants bruts
 export interface RemoteVideoEntry {
   type: 'video';
   title: string; // Titre vidéo original
@@ -37,7 +34,6 @@ export interface RemoteBlogPayload {
   metadata?: Record<string, unknown>;
 }
 
-// Type interne unifié pour l'UI
 export type BlogKind = 'annonce' | 'nouvelle_video';
 
 export interface BlogUnifiedItem {
@@ -49,15 +45,11 @@ export interface BlogUnifiedItem {
   cover?: string; // Image de couverture
   description: string; // description complète
   rawTitle: string; // titre original (video.title / announcement.title)
-  // Spécifiques
   videoUrl?: string;
   attachments?: string[];
   externalLinks?: string[]; // Liens détectés dans la description (hors videoUrl)
 }
 
-// Images fallback (dans public/images/blog-default)
-// Ajouter simplement de nouveaux fichiers dans ce dossier puis compléter ce tableau si besoin.
-// (On évite la lecture dynamique du FS car ce fetch s'exécute côté client.)
 const FALLBACK_DEFAULTS: string[] = [
   '/images/blog-default/1.webp',
   '/images/blog-default/2.webp',

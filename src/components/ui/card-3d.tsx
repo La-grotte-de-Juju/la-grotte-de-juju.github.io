@@ -10,7 +10,7 @@ interface Card3DProps {
   metallicEffect?: boolean;
   intensity?: number;
   borderRadius?: string;
-  performanceMode?: 'auto' | 'reduced' | 'off'; // 'auto' détecte préférences & nombre d'instances
+  performanceMode?: 'auto' | 'reduced' | 'off';
 }
 
 export function Card3D({
@@ -102,10 +102,10 @@ export function Card3D({
       onClick={handleClick}
       style={{
         perspective: '1200px',
-        zIndex: isHovered ? 999 : 1, // Utiliser une valeur plus élevée pour s'assurer que l'élément passe au-dessus de tout
+  zIndex: isHovered ? 999 : 1,
         position: 'relative',
         cursor: 'pointer',
-        transition: 'z-index 0.01s', // Transition rapide pour l'index z
+  transition: 'z-index 0.01s',
       }}
       whileHover={effectivePerformance === 'off' ? undefined : { 
         scale: effectivePerformance === 'reduced' ? 1.03 : 1.08,
@@ -126,7 +126,7 @@ export function Card3D({
             : '0 10px 20px rgba(0, 0, 0, 0.1)',
           transition: 'box-shadow 0.3s',
           position: 'relative',
-          willChange: isHovered ? 'transform' : 'auto', // évite will-change permanent
+          willChange: isHovered ? 'transform' : 'auto',
         }}
       >
         <div 

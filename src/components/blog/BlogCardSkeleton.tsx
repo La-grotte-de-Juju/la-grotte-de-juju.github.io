@@ -2,9 +2,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
 
-// Skeleton shimmer utility classes
-// Tailwind: animate-pulse alternative custom shimmer via bg-gradient
-
 export const BlogCardSkeleton = memo(function BlogCardSkeleton() {
   return (
     <motion.div
@@ -39,5 +36,3 @@ function Shimmer(){
   );
 }
 
-// Add keyframes via style tag if not already present globally (fallback)
-// (Optionnel: la plupart du temps vous ajouterez l'animation dans globals.css)

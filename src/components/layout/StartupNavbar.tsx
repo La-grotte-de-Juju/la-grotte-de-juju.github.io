@@ -48,11 +48,10 @@ const StartupNavbar: React.FC = () => {
     }, 100);
   }, []);
 
-  // Détection responsive pour appliquer une width différente mobile / desktop
   useEffect(() => {
     const handleResize = () => {
       if (typeof window !== 'undefined') {
-        setIsMobile(window.innerWidth < 768); // breakpoint Tailwind md
+  setIsMobile(window.innerWidth < 768);
       }
     };
     handleResize();
@@ -112,7 +111,6 @@ const StartupNavbar: React.FC = () => {
     position: 'relative' as const,
   };
 
-  // Met à jour une variable CSS globale avec la hauteur réelle de la navbar (utile pour les sections sticky en dessous)
   useEffect(() => {
     const updateVar = () => {
       if (navbarRef.current) {

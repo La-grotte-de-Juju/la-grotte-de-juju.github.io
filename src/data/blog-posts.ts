@@ -1,5 +1,3 @@
-// Dataset statique de posts de blog (à remplacer par une source CMS/API plus tard)
-// Champs extensibles pour future intégration (markdown, images multiples, etc.)
 export interface BlogPost {
   id: string;
   title: string;

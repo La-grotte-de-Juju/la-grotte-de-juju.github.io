@@ -3,12 +3,8 @@ import Image from "next/image";
 import packageJson from "../../../package.json";
 import SITE_VERSION from "@/config/site-version";
 import { FileText, Map, Tag } from "lucide-react";
-
-// Footer clair & léger aligné avec le style glassy / pastel du site
 export function Footer() {
-		// On récupère soit une variable d'env fournie au build (prioritaire), sinon package.json
-			// Version brute (ex: "testchannel-verbêta-1.10.0") pour correspondre à l'affichage de la carte de développement
-				const version = SITE_VERSION || (packageJson as { version?: string })?.version || "0.0.0";
+		const version = SITE_VERSION || (packageJson as { version?: string })?.version || "0.0.0";
 	const year = new Date().getFullYear();
 
 		return (

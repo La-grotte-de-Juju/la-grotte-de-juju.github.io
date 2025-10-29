@@ -17,13 +17,10 @@ export interface BDFolder {
 
 export async function getBDFolders(): Promise<BDFolder[]> {
   try {
-    // Récupérer directement depuis l'API GitHub
     const response = await fetch('https://api.github.com/repos/La-grotte-de-Juju/La-grotte-de-Juju-Ressources/contents/BD', {
       headers: {
         'Accept': 'application/vnd.github.v3+json',
-        // Pas de token pour éviter les problèmes de CORS côté client
       },
-      // Cache pendant 5 minutes
       next: { revalidate: 300 }
     });
 
@@ -34,7 +31,6 @@ export async function getBDFolders(): Promise<BDFolder[]> {
 
     const bdContents: GitHubFile[] = await response.json();
     
-    // Filtrer seulement les dossiers
     const folders = bdContents.filter(item => item.type === 'dir');
     
     if (folders.length === 0) {
@@ -42,7 +38,6 @@ export async function getBDFolders(): Promise<BDFolder[]> {
       return getStaticBDData();
     }
     
-    // Pour chaque dossier, récupérer son contenu
     const bdData: BDFolder[] = await Promise.all(
       folders.map(async (folder) => {
         try {
@@ -66,13 +61,11 @@ export async function getBDFolders(): Promise<BDFolder[]> {
 
           const folderContents: GitHubFile[] = await folderResponse.json();
           
-          // Chercher le fichier hero.webp pour la couverture
           const heroFile = folderContents.find(file => 
             file.type === 'file' && 
             file.name.toLowerCase() === 'hero.webp'
           );
           
-          // Récupérer toutes les images pour les pages (excluant hero.webp)
           const imageFiles = folderContents
             .filter(file => 
               file.type === 'file' && 
@@ -81,18 +74,15 @@ export async function getBDFolders(): Promise<BDFolder[]> {
             )
             .map(file => `https://raw.githubusercontent.com/La-grotte-de-Juju/La-grotte-de-Juju-Ressources/main/${file.path}`)
             .sort((a, b) => {
-              // Trier par numéro dans le nom de fichier
               const aNum = parseInt(a.match(/(\d+)/)?.[1] || '0');
               const bNum = parseInt(b.match(/(\d+)/)?.[1] || '0');
               return aNum - bNum;
             });
 
-          // URL de la couverture (hero.webp)
           const coverImage = heroFile 
             ? `https://raw.githubusercontent.com/La-grotte-de-Juju/La-grotte-de-Juju-Ressources/main/${heroFile.path}`
             : undefined;
 
-          // Chercher un fichier description.txt
           const descriptionFile = folderContents.find(file => 
             file.type === 'file' && 
             /^(description|readme)\.txt$/i.test(file.name)
@@ -137,7 +127,6 @@ export async function getBDFolders(): Promise<BDFolder[]> {
       })
     );
 
-    // Trier par nom alphabétique
     const validBDData = bdData.sort((a, b) => a.name.localeCompare(b.name));
 
     console.log(`✅ ${validBDData.length} BD(s) chargée(s) depuis GitHub`);
@@ -150,7 +139,6 @@ export async function getBDFolders(): Promise<BDFolder[]> {
   }
 }
 
-// Données de fallback en cas d'erreur avec l'API GitHub
 function getStaticBDData(): BDFolder[] {
   return [
     {

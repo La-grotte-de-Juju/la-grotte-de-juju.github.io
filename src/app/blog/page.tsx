@@ -12,7 +12,6 @@ import { getBlogDataCached, BlogUnifiedItem } from '@/data/remote-blog';
 import { Portal } from '@/components/utility/Portal';
 
 export default function BlogPage() {
-  // State
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<string | null>(null);
   const [items, setItems] = useState<BlogUnifiedItem[]>([]);
@@ -22,8 +21,6 @@ export default function BlogPage() {
   const [visibleCount, setVisibleCount] = useState(12);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // Chargement initial
-  // Initial fetch
   useEffect(() => {
     let alive = true;
     (async () => {
@@ -40,7 +37,6 @@ export default function BlogPage() {
     return () => { alive = false; };
   }, []);
 
-  // Derived filtered list
   const { visibleItems, total } = useMemo(() => {
     const base = items;
     const q = query.trim().toLowerCase();
@@ -52,12 +48,10 @@ export default function BlogPage() {
   const currentItems = (!query.trim() && visibleItems.length === 0) ? items : visibleItems;
   const displayedItems = currentItems.slice(0, visibleCount);
 
-  // Reset pagination when filters / query change
   useEffect(() => {
     setVisibleCount(12);
   }, [query, filterKinds, items]);
 
-  // Intersection Observer for infinite scroll
   useEffect(() => {
     if (!sentinelRef.current) return;
     const el = sentinelRef.current;
@@ -151,7 +145,6 @@ export default function BlogPage() {
           layout 
           className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3" 
           initial={false}
-          // Re-stagger subtil lorsque la requête ou les filtres changent
           animate={{ opacity:1 }}
           transition={{ staggerChildren: query || filterKinds.size>0 ? 0.035 : 0.02, when:'beforeChildren' }}
           key={/* force légère relance des animations d'entrée seulement pour les nouveaux éléments */ undefined}

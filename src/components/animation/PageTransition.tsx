@@ -8,10 +8,8 @@ import { useAnimationContext } from "@/components/layout/AnimationProvider";
 interface PageTransitionProps {
   children: ReactNode;
   blurIntensity?: number; 
-  animationsReady?: boolean; // possibilité de forcer via prop
+  animationsReady?: boolean;
 }
-
-// Animations modernes style Apple avec des courbes de Bézier élégantes
 const variants = {
   initial: {
     opacity: 0,
@@ -42,7 +40,6 @@ const variants = {
   },
 };
 
-// Transition fluide inspirée des animations Apple
 const appleTransition = {
   type: "spring",
   stiffness: 400,

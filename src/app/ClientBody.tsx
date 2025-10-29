@@ -5,7 +5,7 @@ import LoadingScreen from "@/components/layout/LoadingScreen";
 import PageTransition from "@/components/animation/PageTransition";
 import { usePathname } from "next/navigation";
 import { DevNotification } from "@/components/ui/dev-notification";
-import CustomScrollbar from "@/components/ui/CustomScrollbar"; // Import du composant
+import CustomScrollbar from "@/components/ui/CustomScrollbar";
 import { AnimationProvider, useAnimationContext } from "@/components/layout/AnimationProvider";
 import { useEffect, useRef, useState } from "react";
 
@@ -40,13 +40,11 @@ function BodyContent({ children }: { children: React.ReactNode }) {
   }, [pathname, resetAnimations]);
 
   const handleLoaderFinished = () => {
-    // Laisse un très léger délai pour que le DOM du loader soit retiré avant lancement animations
     requestAnimationFrame(() => {
       setTimeout(() => setAnimationsReady(true), 40);
     });
   };
 
-  // Fallback: si pour une raison le loader resterait affiché >6s, forcer
   useEffect(() => {
     const force = setTimeout(() => {
       setAnimationsReady(true);
@@ -73,7 +71,6 @@ function BodyContent({ children }: { children: React.ReactNode }) {
 
 export default function ClientBody({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  // Tolère éventuel trailing slash ou sous-segments (ex: /fiches-personnages?x=1)
   const isFichesPersos = pathname?.startsWith("/fiches-personnages");
   const bodyClass = isFichesPersos
     ? "antialiased min-h-screen bg-white fiche-persos-page"
@@ -82,7 +79,6 @@ export default function ClientBody({ children }: { children: React.ReactNode }) 
   return (
     <body
       className={bodyClass}
-      // style inline pour écraser toute image de fond provenant de classes utilitaires si page fiches persos
       style={isFichesPersos ? { backgroundColor: '#ffffff', backgroundImage: 'none' } : undefined}
       suppressHydrationWarning
     >

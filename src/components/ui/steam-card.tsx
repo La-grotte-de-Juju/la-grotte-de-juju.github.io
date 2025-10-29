@@ -6,8 +6,8 @@ import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 interface SteamCardProps {
   children: React.ReactNode;
   className?: string;
-  intensity?: number; // Intensité de l'effet de parallax (1-10)
-  shineIntensity?: number; // Intensité de l'effet brillant (1-10)
+  intensity?: number;
+  shineIntensity?: number;
   borderRadius?: string;
   shadowColor?: string;
 }
@@ -23,20 +23,16 @@ export function SteamCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Valeurs de mouvement pour le suivi de la souris
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Configuration des valeurs de rotation et de perspective
   const rotateX = useTransform(mouseY, [-0.5, 0.5], [intensity, -intensity]);
   const rotateY = useTransform(mouseX, [-0.5, 0.5], [-intensity, intensity]);
 
-  // Appliquer un effet de ressort pour une animation plus fluide
   const springConfig = { damping: 15, stiffness: 150 };
   const springRotateX = useSpring(rotateX, springConfig);
   const springRotateY = useSpring(rotateY, springConfig);
   
-  // Position pour l'effet brillant
   const shineX = useTransform(mouseX, [-0.5, 0.5], [0, 100], {
     clamp: true,
   });
@@ -44,7 +40,6 @@ export function SteamCard({
     clamp: true,
   });
 
-  // Effet d'ombre dynamique
   const shadowIntensity = useTransform(
     mouseY,
     [-0.5, 0, 0.5],
@@ -72,7 +67,6 @@ export function SteamCard({
       `${x}px ${y}px ${blur}px ${shadowColor.replace(')', `, ${intensity})`).replace('rgba', 'rgba')}`
   );
 
-  // Gérer le mouvement de la souris sur la carte
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
 
@@ -80,7 +74,6 @@ export function SteamCard({
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     
-    // Calculer la position relative de la souris sur la carte (-0.5 à 0.5)
     const relativeX = (e.clientX - centerX) / rect.width;
     const relativeY = (e.clientY - centerY) / rect.height;
     
@@ -88,7 +81,6 @@ export function SteamCard({
     mouseY.set(relativeY);
   };
 
-  // Ajouter des valeurs pour l'effet de réfraction
   const refractionX = useTransform(mouseX, [-0.5, 0.5], [-5, 5]);
   const refractionY = useTransform(mouseY, [-0.5, 0.5], [-5, 5]);
 

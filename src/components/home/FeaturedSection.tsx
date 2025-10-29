@@ -12,48 +12,47 @@ const featuredItems = [
 	{
 		title: "Bibliothèque de La Grotte",
 		description: "Entre dans la Bibliothèque de La Grotte et retrouve toutes les bandes dessinées créées par Juju, mêlant humour, aventures et univers uniques à découvrir sans modération.",
-		image: "/images/animation/Strip-grotte-Visual.gif",
+		image: "/images/comics-banner.webp",
 		link: "/bd",
 		icon: BookOpen,
 		category: "BD & Comics",
 		color: "from-emerald-500 to-teal-600",
 		bgPattern: "bg-emerald-50 dark:bg-emerald-950/20",
-		shadowRgb: "16,185,129" // emerald-500
+		shadowRgb: "16,185,129"
 	},
 	{
 		title: "Galerie des Héros",
 		description: "Découvrez les personnages attachants de La Grotte avec leurs histoires fascinantes et leurs secrets les mieux gardés.",
-		image: "/images/animation/fichepersos.gif",
+		image: "/images/cara-banner.webp",
 		link: "/fiches-personnages",
 		icon: Users,
 		category: "Personnages",
 		color: "from-purple-500 to-indigo-600",
 		bgPattern: "bg-purple-50 dark:bg-purple-950/20",
-		shadowRgb: "168,85,247" // purple-500
+		shadowRgb: "168,85,247"
 	},
 	{
 		title: "Blog de La Grotte",
 		description: "Toutes les news de l'univers : annonces YouTube, nouveautés des BD, events Discord, coulisses et mises à jour des autres réseaux – tout est centralisé ici !",
-		image: "/images/headerfullresV1.webp",
+		image: "/images/fanarts-banner.webp",
 		link: "/blog",
 		icon: Newspaper,
 		category: "Actus & News",
 		color: "from-sky-500 to-blue-600",
 		bgPattern: "bg-sky-50 dark:bg-sky-950/20",
-		shadowRgb: "14,165,233" // sky-500
+		shadowRgb: "14,165,233"
 	},
 ];
 
 function FeatureCard({ item, index }: { item: typeof featuredItems[0], index: number }) {
 	const [isHovered, setIsHovered] = useState(false);
 
-	// Ombres : base neutre + hover légèrement teinté (subtile, moins saturé)
 	const baseShadow = "0 2px 6px -2px rgba(0,0,0,0.08), 0 1px 3px -1px rgba(0,0,0,0.04)";
 	const hoverShadow = [
 		"0 4px 18px -4px rgba(0,0,0,0.14)",
 		"0 2px 8px -2px rgba(0,0,0,0.08)",
-		`0 0 0 1px rgba(${item.shadowRgb},0.22)`, // léger ring teinté
-		`0 0 0 6px rgba(${item.shadowRgb},0.06)` // halo très doux
+		`0 0 0 1px rgba(${item.shadowRgb},0.22)`,
+		`0 0 0 6px rgba(${item.shadowRgb},0.06)`
 	].join(", ");
 	
 	return (
